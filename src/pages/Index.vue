@@ -4,7 +4,10 @@
       <q-card>
         <q-card-section>
           <div class="row justify-between items-center">
-            <h1 class="text-h5">{{ title }}</h1>
+            <div>
+              <h1 class="text-h5 q-mb-none">Dev Tool</h1>
+              <h2 class="text-subtitle1 q-mt-none">Priorisation Backlog</h2>
+            </div>
             <div>
               <copy-button />
             </div>

@@ -1,5 +1,5 @@
 export default function () {
   return {
-    title: 'Priorisation Backlog - SoFA',
+    title: 'Dev Tool - Priorisation Backlog',
   }
 }

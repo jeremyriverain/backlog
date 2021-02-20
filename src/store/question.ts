@@ -14,10 +14,8 @@ const questions = ref<Question[]>([
   },
   {
     id: 3,
-    label: 'Est-ce que ça sert la vision produit* ?',
+    label: 'Est-ce que ça sert la vision produit ?',
     result: false,
-    help:
-      '* Proposer la meilleure expérience de développement possible aux développeurs front arkea',
   },
   {
     id: 4,
