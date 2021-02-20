@@ -1,13 +1,18 @@
 <template>
   <div class="q-pa-md">
     <div v-if="!question.options">
-      <q-toggle :label="question.label" v-model="value" toggle-indeterminate />
+      <q-toggle
+        :label="question.label"
+        :model-value="result"
+        @update:modelValue="updateResult(question.id, $event)"
+      />
     </div>
 
     <div v-else>
       {{ question.label }}
       <q-option-group
-        v-model="value"
+        :model-value="result"
+        @update:modelValue="updateResult(question.id, $event)"
         :options="question.options"
         color="primary"
         inline
@@ -22,8 +27,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { Question } from './models'
+import { defineComponent, ref, watch } from 'vue'
+import { Question, Result } from 'src/store/models'
+import questionStore from 'src/store/question'
 export default defineComponent({
   name: 'Question',
   props: {
@@ -32,9 +38,20 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    const value = ref(null)
-    return { value }
+  setup(props) {
+    const result = ref<Result>(null)
+    watch(
+      () => props.question.result,
+      (newResult) => {
+        result.value = newResult
+      },
+      {
+        immediate: true,
+      }
+    )
+
+    const { updateResult } = questionStore()
+    return { result, updateResult }
   },
 })
 </script>

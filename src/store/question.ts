@@ -1,24 +1,28 @@
 import { ref, computed } from 'vue'
-import { Question } from 'src/store/models'
+import { Question, Result } from 'src/store/models'
 
 const questions = ref<Question[]>([
   {
     id: 1,
     label: "Pouvons-nous en définir clairement le périmètre et l'étendue ?",
+    result: false,
   },
   {
     id: 2,
     label: 'Pouvons nous le faire bien ?',
+    result: false,
   },
   {
     id: 3,
     label: 'Est-ce que ça sert la vision produit* ?',
+    result: false,
     help:
       '* Proposer la meilleure expérience de développement possible aux développeurs front arkea',
   },
   {
     id: 4,
     label: "Est-ce ça améliore / complète l'expérience développeur actuelle ?",
+    result: null,
     options: [
       {
         value: 1,
@@ -37,6 +41,7 @@ const questions = ref<Question[]>([
   {
     id: 5,
     label: 'Est-ce que ça impacte:',
+    result: null,
     options: [
       {
         value: 1,
@@ -60,6 +65,7 @@ const questions = ref<Question[]>([
     id: 6,
     label:
       "Pouvons-nous le concevoir de telle manière que l'impact soit supérieur à l'effort fourni ?",
+    result: null,
     options: [
       {
         value: 1,
@@ -79,6 +85,7 @@ const questions = ref<Question[]>([
   {
     id: 7,
     label: "Est-ce que ça servira toujours l'expérience développeur à:",
+    result: null,
     options: [
       {
         value: 1,
@@ -97,7 +104,43 @@ const questions = ref<Question[]>([
 ])
 
 export default function () {
+  const updateResult = (id: number, result: Result): Question | null => {
+    const index = questions.value.findIndex((q) => q.id === id)
+
+    if (index === -1) {
+      return null
+    }
+
+    const question = questions.value[index]
+    question.result = result
+    questions.value.splice(index, 1, question)
+
+    questions.value = [...questions.value]
+    return question
+  }
+
+  const canShowPriority = computed(() => {
+    return !questions.value.find((q) => q.result === false)
+  })
+
+  const priority = computed(() => {
+    if (!canShowPriority.value) {
+      return null
+    }
+
+    let result = 0
+
+    questions.value
+      .filter((q) => typeof q.result === 'number')
+      .forEach((q) => (result += q.result as number))
+
+    return result
+  })
+
   return {
     questions: computed(() => questions.value),
+    updateResult,
+    canShowPriority,
+    priority,
   }
 }

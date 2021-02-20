@@ -4,11 +4,9 @@
       <q-card>
         <q-card-section>
           <div class="row justify-between items-center">
-            <h1 class="text-h5">Priorisation backlog</h1>
+            <h1 class="text-h5">{{ title }}</h1>
             <div>
-              <q-btn round icon="content_copy" flat>
-                <q-badge floating>4</q-badge>
-              </q-btn>
+              <copy-button />
             </div>
           </div>
         </q-card-section>
@@ -26,17 +24,22 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import questionStore from 'src/store/question'
+import metaStore from 'src/store/meta'
 import Question from 'components/Question.vue'
+import CopyButton from 'src/components/CopyButton.vue'
 
 export default defineComponent({
   name: 'PageIndex',
   components: {
     Question,
+    CopyButton,
   },
   setup() {
     const { questions } = questionStore()
+    const { title } = metaStore()
     return {
-      questions: questions.value,
+      questions,
+      title,
     }
   },
 })
