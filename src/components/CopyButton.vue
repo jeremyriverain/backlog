@@ -7,13 +7,23 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import questionStore from 'src/store/question'
+import { copyToClipboard } from 'quasar'
+
 export default defineComponent({
   name: 'CopyButton',
   setup() {
-    const { questions, canShowPriority, priority } = questionStore()
+    const {
+      questions,
+      canShowPriority,
+      priority,
+      markdownContent,
+    } = questionStore()
+
     const onClick = () => {
       console.log(questions.value)
+      copyToClipboard(markdownContent.value).catch((e) => console.log(e))
     }
+
     return {
       onClick,
       canShowPriority,

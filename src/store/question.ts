@@ -137,10 +137,60 @@ export default function () {
     return result
   })
 
+  const markdownHeader = `| Question | Réponse | Poids |
+| ------------- | ------------- | ------------- |`
+
+  const formatResult = (question: Question): string => {
+    const result = question.result
+    if (!question.options && result === null) {
+      return ''
+    }
+
+    if (typeof result === 'boolean') {
+      return result ? '✅' : '❌'
+    }
+
+    let options = ''
+    question.options?.forEach((option, i) => {
+      if (i) {
+        options += '<br>'
+      }
+      options +=
+        result === option.value
+          ? `- **${option.label}** ✔️`
+          : '- ' + option.label
+    })
+
+    return options
+  }
+
+  const formatWeight = (question: Question): string => {
+    if (typeof question.result === 'boolean') {
+      return 'NS'
+    }
+
+    if (!canShowPriority.value || question.result === null) {
+      return ''
+    }
+
+    return question.result.toString()
+  }
+
+  const markdownContent = computed(() => {
+    let content = markdownHeader
+
+    questions.value.forEach((q) => {
+      content += `\n| ${q.label} | ${formatResult(q)} | ${formatWeight(q)} |`
+    })
+
+    return content
+  })
+
   return {
     questions: computed(() => questions.value),
     updateResult,
     canShowPriority,
     priority,
+    markdownContent,
   }
 }
