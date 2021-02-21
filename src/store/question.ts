@@ -184,11 +184,19 @@ export default function () {
     return content
   })
 
+  const reset = () => {
+    questions.value = questions.value.map((q) => {
+      q.options ? (q.result = null) : (q.result = false)
+      return q
+    })
+  }
+
   return {
     questions: computed(() => questions.value),
     updateResult,
     canShowPriority,
     priority,
     markdownContent,
+    reset,
   }
 }
