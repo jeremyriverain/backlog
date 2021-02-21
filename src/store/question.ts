@@ -181,6 +181,11 @@ export default function () {
       content += `\n| ${q.label} | ${formatResult(q)} | ${formatWeight(q)} |`
     })
 
+    if (canShowPriority.value && priority.value) {
+      content += `
+\n/label ~"${priority.value}"`
+    }
+
     return content
   })
 
